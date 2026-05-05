@@ -1,0 +1,2 @@
+ALTER TABLE question ADD COLUMN prompt_ro VARCHAR(2000);
+ALTER TABLE question ADD COLUMN answer_ro CLOB;

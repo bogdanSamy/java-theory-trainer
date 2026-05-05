@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { getQuestions, createQuestion, updateQuestion, deleteQuestion } from '../api/client'
 import type { Question } from '../types'
+import { useLang } from '../context/LanguageContext'
 
 const ALL_TAGS = ['Java', 'OOP', 'Collections', 'Streams', 'JVM', 'GC', 'Concurrency', 'Spring', 'JPA', 'SQL', 'Testing', 'Build', 'SystemDesign']
 
@@ -24,6 +25,7 @@ export default function Questions() {
   const [form, setForm] = useState<FormState>(emptyForm)
   const [saving, setSaving] = useState(false)
   const [expandedId, setExpandedId] = useState<number | null>(null)
+  const { lang } = useLang()
 
   const load = useCallback(async () => {
     try {
@@ -73,7 +75,7 @@ export default function Questions() {
   }
 
   const handleDelete = async (id: number) => {
-    if (!confirm('Delete this question?')) return
+    if (!confirm(lang === 'en' ? 'Delete this question?' : 'Ștergeți această întrebare?')) return
     try {
       await deleteQuestion(id)
       load()
@@ -84,28 +86,32 @@ export default function Questions() {
 
   return (
     <div className="page">
-      <h1 className="page-title">Questions</h1>
+      <h1 className="page-title">{lang === 'en' ? 'Questions' : 'Întrebări'}</h1>
 
       <div className="questions-toolbar">
         <input
           type="text"
-          placeholder="Search questions..."
+          placeholder={lang === 'en' ? 'Search questions...' : 'Caută întrebări...'}
           value={query}
           onChange={e => setQuery(e.target.value)}
         />
         <select value={tagFilter} onChange={e => setTagFilter(e.target.value)}>
-          <option value="">All tags</option>
+          <option value="">{lang === 'en' ? 'All tags' : 'Toate tag-urile'}</option>
           {ALL_TAGS.map(t => <option key={t} value={t}>{t}</option>)}
         </select>
-        <button className="btn btn-primary" onClick={openAdd}>+ Add Question</button>
+        <button className="btn btn-primary" onClick={openAdd}>
+          {lang === 'en' ? '+ Add Question' : '+ Adaugă Întrebare'}
+        </button>
       </div>
 
       {error && <div className="error" style={{ marginBottom: '1rem' }}>{error}</div>}
 
       {loading ? (
-        <div className="loading">Loading questions...</div>
+        <div className="loading">{lang === 'en' ? 'Loading questions...' : 'Se încarcă întrebările...'}</div>
       ) : questions.length === 0 ? (
-        <div className="empty-state">No questions found. Add some or adjust your filters.</div>
+        <div className="empty-state">
+          {lang === 'en' ? 'No questions found. Add some or adjust your filters.' : 'Nicio întrebare găsită. Adaugați sau ajustați filtrele.'}
+        </div>
       ) : (
         <div className="question-list">
           {questions.map(q => (
@@ -116,11 +122,15 @@ export default function Questions() {
                   onClick={() => setExpandedId(expandedId === q.id ? null : q.id)}
                   style={{ cursor: 'pointer' }}
                 >
-                  {q.prompt}
+                  {lang === 'ro' && q.promptRo ? q.promptRo : q.prompt}
                 </div>
                 <div className="question-item-actions">
-                  <button className="btn btn-outline btn-sm" onClick={() => openEdit(q)}>Edit</button>
-                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(q.id)}>Delete</button>
+                  <button className="btn btn-outline btn-sm" onClick={() => openEdit(q)}>
+                    {lang === 'en' ? 'Edit' : 'Editează'}
+                  </button>
+                  <button className="btn btn-danger btn-sm" onClick={() => handleDelete(q.id)}>
+                    {lang === 'en' ? 'Delete' : 'Șterge'}
+                  </button>
                 </div>
               </div>
               <div className="question-item-meta">
@@ -132,13 +142,13 @@ export default function Questions() {
                 )}
                 {q.lastRating && (
                   <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                    Last: {q.lastRating} · Next: {q.nextReviewDate || 'not scheduled'}
+                    {lang === 'en' ? 'Last:' : 'Ultima:'} {q.lastRating} · {lang === 'en' ? 'Next:' : 'Următ.:'} {q.nextReviewDate || (lang === 'en' ? 'not scheduled' : 'neplanificat')}
                   </span>
                 )}
               </div>
               {expandedId === q.id && (
                 <div className="question-answer" style={{ marginTop: '0.5rem' }}>
-                  {q.answer}
+                  {lang === 'ro' && q.answerRo ? q.answerRo : q.answer}
                 </div>
               )}
             </div>
@@ -149,27 +159,27 @@ export default function Questions() {
       {showForm && (
         <div className="modal-overlay" onClick={e => { if (e.target === e.currentTarget) setShowForm(false) }}>
           <div className="modal">
-            <h3>{editing ? 'Edit Question' : 'Add Question'}</h3>
+            <h3>{editing ? (lang === 'en' ? 'Edit Question' : 'Editați Întrebarea') : (lang === 'en' ? 'Add Question' : 'Adaugați Întrebare')}</h3>
             <div className="form-group">
-              <label>Question *</label>
+              <label>{lang === 'en' ? 'Question *' : 'Întrebare *'}</label>
               <textarea
                 value={form.prompt}
                 onChange={e => setForm(f => ({ ...f, prompt: e.target.value }))}
-                placeholder="Enter the question..."
+                placeholder={lang === 'en' ? 'Enter the question...' : 'Introduceți întrebarea...'}
                 rows={3}
               />
             </div>
             <div className="form-group">
-              <label>Answer *</label>
+              <label>{lang === 'en' ? 'Answer *' : 'Răspuns *'}</label>
               <textarea
                 value={form.answer}
                 onChange={e => setForm(f => ({ ...f, answer: e.target.value }))}
-                placeholder="Enter the answer..."
+                placeholder={lang === 'en' ? 'Enter the answer...' : 'Introduceți răspunsul...'}
                 rows={5}
               />
             </div>
             <div className="form-group">
-              <label>Tags (comma-separated)</label>
+              <label>{lang === 'en' ? 'Tags (comma-separated)' : 'Tag-uri (separate prin virgulă)'}</label>
               <input
                 type="text"
                 value={form.tags}
@@ -178,17 +188,19 @@ export default function Questions() {
               />
             </div>
             <div className="form-group">
-              <label>Difficulty</label>
+              <label>{lang === 'en' ? 'Difficulty' : 'Dificultate'}</label>
               <select value={form.difficulty} onChange={e => setForm(f => ({ ...f, difficulty: e.target.value }))}>
-                <option value="EASY">Easy</option>
-                <option value="MEDIUM">Medium</option>
-                <option value="HARD">Hard</option>
+                <option value="EASY">{lang === 'en' ? 'Easy' : 'Ușor'}</option>
+                <option value="MEDIUM">{lang === 'en' ? 'Medium' : 'Mediu'}</option>
+                <option value="HARD">{lang === 'en' ? 'Hard' : 'Dificil'}</option>
               </select>
             </div>
             <div className="modal-actions">
-              <button className="btn btn-outline" onClick={() => setShowForm(false)}>Cancel</button>
+              <button className="btn btn-outline" onClick={() => setShowForm(false)}>
+                {lang === 'en' ? 'Cancel' : 'Anulează'}
+              </button>
               <button className="btn btn-primary" onClick={handleSave} disabled={saving || !form.prompt.trim() || !form.answer.trim()}>
-                {saving ? 'Saving...' : 'Save'}
+                {saving ? (lang === 'en' ? 'Saving...' : 'Se salvează...') : (lang === 'en' ? 'Save' : 'Salvează')}
               </button>
             </div>
           </div>

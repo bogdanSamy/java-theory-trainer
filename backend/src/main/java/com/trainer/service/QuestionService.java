@@ -40,6 +40,8 @@ public class QuestionService {
         q.setAnswer(dto.getAnswer());
         q.setTags(dto.getTags());
         q.setDifficulty(dto.getDifficulty());
+        q.setPromptRo(dto.getPromptRo());
+        q.setAnswerRo(dto.getAnswerRo());
         Question saved = questionRepository.save(q);
         return toDto(saved);
     }
@@ -52,6 +54,8 @@ public class QuestionService {
         q.setAnswer(dto.getAnswer());
         q.setTags(dto.getTags());
         q.setDifficulty(dto.getDifficulty());
+        q.setPromptRo(dto.getPromptRo());
+        q.setAnswerRo(dto.getAnswerRo());
         return toDto(questionRepository.save(q));
     }
 
@@ -72,6 +76,8 @@ public class QuestionService {
             q.setAnswer(dto.getAnswer());
             q.setTags(dto.getTags());
             q.setDifficulty(dto.getDifficulty());
+            q.setPromptRo(dto.getPromptRo());
+            q.setAnswerRo(dto.getAnswerRo());
             questionRepository.save(q);
         }
         return dtos.size();
@@ -84,6 +90,8 @@ public class QuestionService {
         dto.setAnswer(q.getAnswer());
         dto.setTags(q.getTags());
         dto.setDifficulty(q.getDifficulty());
+        dto.setPromptRo(q.getPromptRo());
+        dto.setAnswerRo(q.getAnswerRo());
         reviewStateRepository.findByQuestionId(q.getId()).ifPresent(rs -> {
             dto.setNextReviewDate(rs.getNextReviewDate() != null ? rs.getNextReviewDate().toString() : null);
             dto.setIntervalDays(rs.getIntervalDays());

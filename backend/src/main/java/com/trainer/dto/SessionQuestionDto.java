@@ -13,4 +13,6 @@ public class SessionQuestionDto {
     private Integer intervalDays;
     private String lastRating;
     private int remaining; // how many due questions remain in session
+    private String promptRo;
+    private String answerRo;
 }

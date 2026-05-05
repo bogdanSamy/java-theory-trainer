@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { startSession, submitReview } from '../api/client'
 import type { SessionQuestion, Rating } from '../types'
+import { useLang } from '../context/LanguageContext'
 
 export default function Session() {
   const [current, setCurrent] = useState<SessionQuestion | null | undefined>(undefined)
@@ -11,6 +12,7 @@ export default function Session() {
   const [error, setError] = useState('')
   const [done, setDone] = useState(0)
   const navigate = useNavigate()
+  const { lang } = useLang()
 
   useEffect(() => {
     startSession()
@@ -33,19 +35,28 @@ export default function Session() {
     }
   }
 
-  if (loading) return <div className="page"><div className="loading">Starting session...</div></div>
+  if (loading) return <div className="page"><div className="loading">{lang === 'en' ? 'Starting session...' : 'Se pornește sesiunea...'}</div></div>
   if (error) return <div className="page"><div className="error">{error}</div></div>
 
   if (current === null) {
     return (
       <div className="page">
         <div className="session-done">
-          <h2>🎉 Session Complete!</h2>
-          <p>You reviewed {done} question{done !== 1 ? 's' : ''} in this session.</p>
-          <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>No more questions due right now. Come back tomorrow!</p>
+          <h2>🎉 {lang === 'en' ? 'Session Complete!' : 'Sesiune Completă!'}</h2>
+          <p>{lang === 'en'
+            ? `You reviewed ${done} question${done !== 1 ? 's' : ''} in this session.`
+            : `Ați recenzat ${done} întrebare${done !== 1 ? 'i' : ''} în această sesiune.`
+          }</p>
+          <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>
+            {lang === 'en' ? 'No more questions due right now. Come back tomorrow!' : 'Nu mai sunt întrebări scadente acum. Reveniți mâine!'}
+          </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button className="btn btn-primary" onClick={() => navigate('/')}>Back to Dashboard</button>
-            <button className="btn btn-outline" onClick={() => navigate('/questions')}>Browse Questions</button>
+            <button className="btn btn-primary" onClick={() => navigate('/')}>
+              {lang === 'en' ? 'Back to Dashboard' : 'Înapoi la Panou'}
+            </button>
+            <button className="btn btn-outline" onClick={() => navigate('/questions')}>
+              {lang === 'en' ? 'Browse Questions' : 'Răsfoiți Întrebările'}
+            </button>
           </div>
         </div>
       </div>
@@ -55,8 +66,8 @@ export default function Session() {
   return (
     <div className="page">
       <div className="session-progress">
-        {done > 0 && <span>✓ {done} reviewed this session · </span>}
-        {current && <span>{current.remaining} remaining</span>}
+        {done > 0 && <span>✓ {done} {lang === 'en' ? 'reviewed this session' : 'recenzate în această sesiune'} · </span>}
+        {current && <span>{current.remaining} {lang === 'en' ? 'remaining' : 'rămase'}</span>}
       </div>
 
       {current && (
@@ -72,7 +83,9 @@ export default function Session() {
             </div>
           )}
 
-          <div className="question-prompt">{current.prompt}</div>
+          <div className="question-prompt">
+            {lang === 'ro' && current.promptRo ? current.promptRo : current.prompt}
+          </div>
 
           {!showAnswer ? (
             <button
@@ -80,13 +93,15 @@ export default function Session() {
               onClick={() => setShowAnswer(true)}
               style={{ marginBottom: '1rem' }}
             >
-              Show Answer
+              {lang === 'en' ? 'Show Answer' : 'Arată Răspunsul'}
             </button>
           ) : (
             <>
-              <div className="question-answer">{current.answer}</div>
+              <div className="question-answer">
+                {lang === 'ro' && current.answerRo ? current.answerRo : current.answer}
+              </div>
               <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '0.75rem' }}>
-                How well did you know this?
+                {lang === 'en' ? 'How well did you know this?' : 'Cât de bine știați asta?'}
               </p>
               <div className="rating-buttons">
                 <button
@@ -94,21 +109,21 @@ export default function Session() {
                   onClick={() => handleRating('HARD')}
                   disabled={submitting}
                 >
-                  😰 Hard (1 day)
+                  {lang === 'en' ? '😰 Hard (1 day)' : '😰 Greu (1 zi)'}
                 </button>
                 <button
                   className="btn btn-warning"
                   onClick={() => handleRating('OK')}
                   disabled={submitting}
                 >
-                  😐 OK (3+ days)
+                  {lang === 'en' ? '😐 OK (3+ days)' : '😐 OK (3+ zile)'}
                 </button>
                 <button
                   className="btn btn-success"
                   onClick={() => handleRating('EASY')}
                   disabled={submitting}
                 >
-                  😊 Easy (7+ days)
+                  {lang === 'en' ? '😊 Easy (7+ days)' : '😊 Ușor (7+ zile)'}
                 </button>
               </div>
             </>

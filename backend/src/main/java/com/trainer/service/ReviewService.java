@@ -103,6 +103,8 @@ public class ReviewService {
         dto.setAnswer(q.getAnswer());
         dto.setTags(q.getTags());
         dto.setDifficulty(q.getDifficulty());
+        dto.setPromptRo(q.getPromptRo());
+        dto.setAnswerRo(q.getAnswerRo());
         dto.setRemaining(remaining);
         reviewStateRepository.findByQuestionId(q.getId()).ifPresent(rs -> {
             dto.setNextReviewDate(rs.getNextReviewDate() != null ? rs.getNextReviewDate().toString() : null);

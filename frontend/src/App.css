@@ -308,3 +308,73 @@ nav a:hover, nav a.active {
 .error { color: var(--danger); text-align: center; padding: 1rem; background: #fef2f2; border-radius: var(--radius); }
 
 .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+/* Dark mode */
+body.dark {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+}
+
+body.dark nav {
+  background: #1e293b;
+}
+
+body.dark .question-answer {
+  background: #1a2e1a;
+  border-color: #166534;
+}
+
+body.dark .tag {
+  background: #1e3a5f;
+  color: #93c5fd;
+}
+
+body.dark .difficulty-EASY { background: #14532d; color: #86efac; }
+body.dark .difficulty-MEDIUM { background: #451a03; color: #fcd34d; }
+body.dark .difficulty-HARD { background: #450a0a; color: #fca5a5; }
+
+body.dark .btn-outline {
+  border-color: var(--border);
+  color: var(--text);
+}
+
+body.dark .questions-toolbar input,
+body.dark .questions-toolbar select,
+body.dark .form-group input,
+body.dark .form-group textarea,
+body.dark .form-group select {
+  background: var(--card);
+  color: var(--text);
+  border-color: var(--border);
+}
+
+body.dark .modal {
+  background: var(--card);
+}
+
+/* Nav controls */
+.nav-controls {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-toggle:hover {
+  background: var(--bg);
+  color: var(--text);
+}
