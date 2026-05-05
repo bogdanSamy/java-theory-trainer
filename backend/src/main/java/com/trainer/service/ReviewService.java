@@ -68,7 +68,7 @@ public class ReviewService {
                     return newRs;
                 });
 
-        int currentInterval = rs.getIntervalDays() != null ? rs.getIntervalDays() : 0;
+        int currentInterval = rs.getIntervalDays() == null ? 0 : rs.getIntervalDays();
         int newInterval;
 
         switch (rating.toUpperCase()) {

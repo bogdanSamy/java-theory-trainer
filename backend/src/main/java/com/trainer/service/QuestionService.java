@@ -5,6 +5,7 @@ import com.trainer.entity.Question;
 import com.trainer.repository.QuestionRepository;
 import com.trainer.repository.ReviewStateRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
@@ -61,6 +63,7 @@ public class QuestionService {
     @Transactional
     public int importQuestions(List<QuestionDto> dtos, boolean replace) {
         if (replace) {
+            log.warn("replace=true: deleting all {} existing questions and their review states", questionRepository.count());
             questionRepository.deleteAll();
         }
         for (QuestionDto dto : dtos) {
