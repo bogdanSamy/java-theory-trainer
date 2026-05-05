@@ -26,6 +26,12 @@ public class Question {
     @Column(length = 50)
     private String difficulty;
 
+    @Column(name = "prompt_ro", length = 2000)
+    private String promptRo;
+
+    @Column(name = "answer_ro", columnDefinition = "CLOB")
+    private String answerRo;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 

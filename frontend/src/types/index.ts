@@ -7,6 +7,8 @@ export interface Question {
   nextReviewDate?: string;
   intervalDays?: number;
   lastRating?: string;
+  promptRo?: string;
+  answerRo?: string;
 }
 
 export interface SessionQuestion extends Question {

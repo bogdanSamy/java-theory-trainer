@@ -15,4 +15,6 @@ public class QuestionDto {
     private String nextReviewDate;
     private Integer intervalDays;
     private String lastRating;
+    private String promptRo;
+    private String answerRo;
 }
